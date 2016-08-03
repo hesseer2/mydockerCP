@@ -2,28 +2,32 @@
 # Pull the docker image from Docker Hub ore create is from the Dockerfile
 #
 
-docker build -t hesseer2/dockercp .
+docker build -t mydockercp2 .
 
-//docker run -i -t hesseer2/dockercp
+docker run --rm -t -i cp d:/data/ dockercp:/tmp/data/mydockercp cellprofiler -c -p /tmp/data/ExampleHuman.cppipe -o /tmp/data/output -i /tmp/data
 
-//docker run -i -t -v c:/data/:/tmp/data hesseer2/dockercp
-
-docker run -t hesseer2/dockercp
+docker run -t mydockercp
 ctrl-c
+docker run -t mydockercp --name dockercp2
 
 docker ps
 
-docker rename 002ad18dde77 dockercp
+docker rename 2e14f4ddce7f dockercp
 
-docker cp c:/data/ dockercp:/tmp/data/
+docker cp d:/data/ dockercp:/tmp/data/
 
-docker exec dockercp cellprofiler -c -p /tmp/data/ExampleHuman.cppipe -o /tmp/data/output/
+# mount a volume to the container
+docker run -v /c/Users/data/:/data --name dockercp ls /data
 
-docker cp dockercp:/tmp/data/ c:/dataFromDocker2/
+docker exec dockercp /usr/cellprofiler/src/CellProfiler/cellprofiler -c -r -i /data/ -o /data/Output/ -p /data/ExampleTumors.cppipe
 
-docker exec dockercp rm -r /tmp/data/
+#docker exec dockercp2 cellprofiler -c -p /tmp/data/ExampleHuman.cppipe -o /tmp/data/output/
 
-docker exec dockercp cellprofiler -c -p /tmp/data/ExampleHuman.cppipe -o /tmp/data/Output/ -i /tmp/data/
+docker cp dockercp:/tmp/data/ d:/dataFromDocker2/
+
+docker exec dockercp2 rm -r /tmp/data/
+
+docker exec dockercp2 cellprofiler -c -p /tmp/data/ExampleHuman.cppipe -o /tmp/data/Output/ -i /tmp/data/
 
 
 
