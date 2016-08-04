@@ -4,12 +4,7 @@
 
 docker build -t mydockercp .
 
-docker run -t mydockercp
-ctrl-c
-
-docker ps
-
-docker rename IMAGE_ID dockercp
+docker run --name dockercp -t mydockercp
 
 docker cp c:/data/ dockercp:/tmp/data/
 
